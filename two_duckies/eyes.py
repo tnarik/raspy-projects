@@ -7,7 +7,7 @@ from picamera import PiCamera
 
 # API configuration
 configuration_file = "config.yaml"
-credentials_file = "creds.csv"
+credentials_file = "credentials.yaml"
 
 try:
   with open(configuration_file, 'r') as stream:
@@ -21,17 +21,17 @@ except Exception as ex:
 twitter_api_key = config['twitter']['api_key']
 twitter_api_secret = config['twitter']['api_secret']
 
-camera = PiCamera()
-
 # Auth Redirection
 auth = tweepy.OAuthHandler(twitter_api_key, twitter_api_secret)
 
 # Use (set) stored access token if available
 try:
-  with open(credentials_file, "r") as f:
-    access_token=f.readline().strip()
-    access_token_secret=f.readline().strip()
-    auth.set_access_token(access_token, access_token_secret)
+  with open(credentials_file, "r") as stream:
+    try:
+      credentials = yaml.load(stream)
+      auth.set_access_token(credentials['token'], credentials['token_secret'])
+    except yaml.YAMLError as error:
+      sys.exit(error)
 except FileNotFoundError:
   # Do the OAuth dance is credentials are not available
   try:
@@ -39,11 +39,13 @@ except FileNotFoundError:
   except tweepy.TweepError as ex:
     print("Error! Failed to get request token.")
     sys.exit(ex)
-  print(redirect_url)
-  webbrowser.open(redirect_url,new=2)
+  if webbrowser.open(redirect_url,new=2):
+    print("A browser window will appear to authorize. You can also access directly: "+redirect_url)
+  else:
+    print("Open the following URL in a browser to authorize: "+redirect_url)
   
   # Verification
-  verifier = input('Please type the verifier from the Twitter page (once you authorize the application):').strip()
+  verifier = input('Please enter the verifier from the Twitter page (once you authorize the application):').strip()
   try:
     auth.get_access_token(verifier)
   except tweepy.TweepError:
@@ -51,15 +53,17 @@ except FileNotFoundError:
     sys.exit(ex)
 
   # Save access token
-  with open(credentials_file, "w") as f:
-    print(auth.access_token, file=f)
-    print(auth.access_token_secret, file=f)
+  credentials = {'token': auth.access_token, 'token_secret': auth.access_token_secret}
+  with open(credentials_file, "w") as file:
+    yaml.dump(credentials, file, default_flow_style=False)
 
+# Initialize camera
+camera = PiCamera()
 
 # Let's go!
-api = tweepy.API(auth)
+twitter_api = tweepy.API(auth)
 
-#public_tweets = api.home_timeline()
+#public_tweets = twitter_api.home_timeline()
 #for tweet in public_tweets:
 #  print("- "+tweet.text)
 
@@ -67,5 +71,8 @@ camera.resolution = (1024, 768)
 camera.start_preview()
 # Camera warm-up time
 sleep(2)
+
 camera.capture('/tmp/capture.jpg')
 sleep(2)
+
+twitter_api.update_with_media('/tmp/capture.jpg')
