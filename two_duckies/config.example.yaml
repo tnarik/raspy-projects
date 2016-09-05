@@ -1,3 +1,6 @@
 twitter:
   api_key: <app key>
   api_secret: <app secret>
+thingspeak:
+  channel: <ThingSpeak channel>
+  write_key: <ThingSpeak channel write key>

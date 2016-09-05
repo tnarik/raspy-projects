@@ -39,9 +39,11 @@ git checkout split
 
 ## Automation
 
-Run the scrdipt automatically via `cron`. This can be configured manually via `crontab -e` or via a script such as the following (which will replace previous jobs if they are already configured):
+Run the script automatically via `cron`. This can be configured manually via `crontab -e` or via a script such as the following (which will replace previous jobs if they are already configured):
 
 ```
 ( crontab -l | awk '!(/two_duckies/ && /\.\/eyes.py/)' &&
 echo "*/10 * * * * cd /home/pi/pypis/two_duckies/ && . .direnv/bin/activate && ./eyes.py > /dev/null 2>&1 || true" ) | crontab
+( crontab -l | awk '!(/two_duckies/ && /\.\/weather.py/)' &&
+echo "* * * * * cd /home/pi/pypis/two_duckies/ && . .direnv/bin/activate && ./weather.py > /dev/null 2>&1 || true" ) | crontab
 ```

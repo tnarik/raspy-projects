@@ -6,3 +6,6 @@ six==1.10.0
 tweepy==3.5.0
 picamera==1.12
 PyYAML==3.12
+-e git+https://github.com/RPi-Distro/RTIMULib.git@b949681af69b45f0f7f4bb53b6770037b5b02178#egg=RTIMULib&subdirectory=Linux/python
+sense-hat==2.2.0
+thingspeak==0.3.6
