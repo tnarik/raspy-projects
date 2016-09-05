@@ -1,11 +1,3 @@
-# Automation
-
-Currently, the script is running on a Pi in its previous incarnation, via crontab:
-
-```
-*/5 * * * * cd /home/pi/pipy/two_duckies/ && . ./env/bin/activate && ./test.py > /dev/null 2>&1 || true
-```
-
 # Setup
 
 ## Physical
@@ -32,5 +24,24 @@ In the same folder, copy `config.example.yaml` to `config.yaml` and configure wi
 With Python3 and Virtualenv already installed in the Pi, create an isolated Python environment, activate it and isntall all requirements:
 
 ```
-virtualenv .direnv && source .direnv/bin/activate && pip install -r requirements.txt
+virtualenv .direnv && . .direnv/bin/activate && pip install -r requirements.txt
+```
+
+
+### Update from GIT
+
+```
+git checkout master
+git pull
+git subtree split --prefix=two_duckies -b split
+git checkout split
+```
+
+## Automation
+
+Run the scrdipt automatically via `cron`. This can be configured manually via `crontab -e` or via a script such as the following (which will replace previous jobs if they are already configured):
+
+```
+( crontab -l | awk '!(/two_duckies/ && /\.\/eyes.py/)' &&
+echo "*/10 * * * * cd /home/pi/pypis/two_duckies/ && . .direnv/bin/activate && ./eyes.py > /dev/null 2>&1 || true" ) | crontab
 ```
