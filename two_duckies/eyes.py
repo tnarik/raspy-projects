@@ -5,6 +5,8 @@ from time import sleep
 import tweepy, webbrowser
 from picamera import PiCamera
 
+from fs.memoryfs import MemoryFS
+
 # API configuration
 configuration_file = "config.yaml"
 credentials_file = "credentials.yaml"
@@ -59,6 +61,7 @@ except FileNotFoundError:
 
 # Initialize camera
 camera = PiCamera()
+memfs=MemoryFS()
 
 # Let's go!
 twitter_api = tweepy.API(auth)
@@ -68,7 +71,10 @@ camera.start_preview()
 # Camera warm-up time
 sleep(2)
 
-camera.capture('/tmp/capture.jpg')
-sleep(2)
+capture_file=memfs.open('memory_capture.jpg', 'w+b')
+camera.capture(capture_file)
+sleep(1)
+twitter_api.update_with_media('memory_capture.jpg', file=capture_file)
+capture_file.close()
 
-twitter_api.update_with_media('/tmp/capture.jpg')
+memfs.close()
