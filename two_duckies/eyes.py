@@ -63,10 +63,6 @@ camera = PiCamera()
 # Let's go!
 twitter_api = tweepy.API(auth)
 
-#public_tweets = twitter_api.home_timeline()
-#for tweet in public_tweets:
-#  print("- "+tweet.text)
-
 camera.resolution = (1024, 768)
 camera.start_preview()
 # Camera warm-up time

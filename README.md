@@ -89,6 +89,9 @@ Describing dependencies in a `requirements.txt` file is a good practice. It can 
 
 Use of Python3 is recommended, so use of Python3 tools should be assumed in this repo.
 
+
+Although the projects can be located anywhere (and some previous practice suggested running code as `root`), I prefer keeping code for all projects (specially when each is compact) under a single folder: `$HOME/pypis`
+
 ### Python modules on the Pi
 
 As we will install support for components and the like via `pip`, within a contained `virtualenv` environment, that means we need the following:
@@ -98,26 +101,11 @@ sudo apt-get install -y python3-pip python3-dev
 sudo pip3 install virtualenv
 ```
 
-To run manually on a virtual environment:
+To run manually on a virtual environment (`.direnv` as convention):
 
 ```
 mkdir <folder>
 cd <folder>
-virtualenv env
-. env/bin/activate
+virtualenv .direnv
+. .direnv/bin/activate
 ```
-
-## Components
-### Blinkt!
-
-Legacy:
-
-```
-#apt-get install -y python-pip python-rpi.gpio python3-pip python3-rpi.gpio python-gpiozero python3-gpiozero python-psutil python3-psutil python-requests python3-requests
-apt-get install -y python-pip python-rpi.gpio python3-pip python3-rpi.gpio python-gpiozero python3-gpiozero python-psutil python3-psutil
-pip install blinkt requests
-pip3 install blinkt requests
-```
-
-If you want to run some examples, you'll also need `tweepy`.
-
