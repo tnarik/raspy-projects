@@ -26,4 +26,4 @@ humidity = sense.get_humidity()
 pressure = sense.get_pressure()
 
 channel = thingspeak.Channel(id=thingspeak_channel,write_key=thingspeak_write_key)
-channel.update(thingspeak_channel, {1: temperature, 2: humidity, 3: pressure})
+channel.update({1: temperature, 2: humidity, 3: pressure})
