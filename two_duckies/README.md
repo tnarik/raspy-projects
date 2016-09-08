@@ -5,6 +5,12 @@
 Connect the Camera Module V2 to the Raspberry Pi you intend to use.
 Connect the Sense HAT as well.
 
+Enable:
+
+```
+sudo raspi-config nonint do_camera 0
+```
+
 ## Deployment
 
 Create a [Twitter Application](https://apps.twitter.com/), with read-write permissions.
