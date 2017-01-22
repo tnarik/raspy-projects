@@ -1,0 +1,4 @@
+#fs==0.5.4
+
+unicornhat==2.1.2
+netifaces==0.10.5

@@ -27,7 +27,7 @@ git checkout split
 
 In the same folder, copy `config.example.yaml` to `config.yaml` and configure with the key and secret for your application.
 
-With Python3 and Virtualenv already installed in the Pi, create an isolated Python environment, activate it and isntall all requirements:
+With Python3 and Virtualenv already installed in the Pi, create an isolated Python environment, activate it and install all requirements:
 
 ```
 virtualenv .direnv && . .direnv/bin/activate && pip install -r requirements.txt
